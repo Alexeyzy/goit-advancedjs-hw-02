@@ -4,26 +4,33 @@ const form = document.querySelector('.form');
 
 form.addEventListener('submit', event => {
   event.preventDefault();
-  
-  const delay = form.elements.delay.value;
-  const promise = new Promise((resolve, reject) => {
 
+  const delay = Number(form.elements.delay.value);
+  const state = form.elements.state.value;
+
+  const promise = new Promise((resolve, reject) => {
     setTimeout(() => {
-      if(form.elements.state.value === "fulfilled"){
-        resolve(iziToast.success({ 
-          message: `Fulfilled promise in ${delay}ms`,
-          color: 'green', 
-          position: 'topRight',  
-        }));
-      }else{
-        reject(iziToast.error({
-          message: `Rejected promise in ${delay}ms`,
-          color: 'green', 
-          position: 'topRight',  
-        }));
+      if (state === 'fulfilled') {
+        resolve(`Fulfilled promise in ${delay}ms`);
+      } else {
+        reject(`Rejected promise in ${delay}ms`);
       }
-    }, delay)
-  })
+    }, delay);
+  });
+
+  promise
+    .then(message => {
+      iziToast.success({
+        message,
+        position: 'topRight',
+      });
+    })
+    .catch(message => {
+      iziToast.error({
+        message,
+        position: 'topRight',
+      });
+    });
 });
 
 
